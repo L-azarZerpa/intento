@@ -1,0 +1,92 @@
+<%- include('template/cabezera.ejs') %> 
+<body>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    body {
+      width: 100%;
+      height: 100vh;
+      background: #fee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .rating {
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .star {
+      font-size: 32px;
+      color: #bbb;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+  
+    .star:hover,
+    .star.checked {
+      color: gold;
+    }
+  
+    .plana {
+      display: none;
+    }
+  </style>
+  
+  <% for (var i=0; i<productosOrdenadosPorPromedioCalificacion.length; i++) { %>
+    <div class="articulo">
+      <h3><%= productosOrdenadosPorPromedioCalificacion[i].name %></h3>
+      <a href="/producto/<%= productosOrdenadosPorPromedioCalificacion[i].id %>">
+        <img src="<%= productosOrdenadosPorPromedioCalificacion[i].url %>" alt="<%= productosOrdenadosPorPromedioCalificacion[i].name %>"></td>
+      </a>
+      <div class="rating">
+        <% for (var j=0; j<productosOrdenadosPorPromedioCalificacion[i].rating ; j++) { %>
+          <i class="bi bi-star-fill checked"></i>
+        <% } %>
+        <% for (var j=productosOrdenadosPorPromedioCalificacion[i].rating; j<5; j++) { %>
+          <i class="bi bi-star-fill star"></i>
+        <% } %>
+      </div>
+      <h1><%= productosOrdenadosPorPromedioCalificacion[i].price %> $</h1>
+      <h6><%= productosOrdenadosPorPromedioCalificacion[i].code %></h6>
+      <h6><%= productosOrdenadosPorPromedioCalificacion[i].description %></h6>
+      <h6><%= productosOrdenadosPorPromedioCalificacion[i].brand %></h6>
+      <h6><%= productosOrdenadosPorPromedioCalificacion[i].size %></h6>
+      <h6><%= productosOrdenadosPorPromedioCalificacion[i].nameCategoria %></h6>
+      <button class="button-add" onclick="add('product-2', 300)">Agregar</button>
+    </div>
+  <% } %>
+  
+  <script>
+    // Calcular el promedio de calificación para cada producto
+function calcularPromedioCalificacion(productos) {
+  return productos.map(producto => {
+    const sumaCalificaciones = producto.calificaciones.reduce((total, calificacion) => total + calificacion, 0);
+    return {
+      ...producto,
+      promedioCalificacion: sumaCalificaciones / producto.calificaciones.length
+    };
+  });
+}
+
+// Ordenar los productos por promedio de calificación
+function ordenarPorPromedioCalificacion(productos) {
+  return productos.sort((a, b) => a.promedioCalificacion - b.promedioCalificacion);
+}
+
+// Filtrar productos con imágenes y calcular su promedio de calificación
+const productosConImagenes = productos.filter(producto => producto.url).map(producto => ({
+  ...producto,
+  calificaciones: [1, 2, 3, 4, 5] // Reemplazar con las calificaciones reales
+}));
+
+const productosConImagenesYPromedioCalificacion = calcularPromedioCalificacion(productosConImagenes);
+const productosOrdenadosPorPromedioCalificacion = ordenarPorPromedioCalificacion(productosConImagenesYPromedioCalificacion);
+  </script>
+</body>
+</html>

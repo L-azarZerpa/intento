@@ -1,0 +1,44 @@
+<%- include('template/cabezera.ejs')  %>
+<body>
+  
+
+
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Lista de estrella</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <!-- ... -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="table-container">
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">ID Usuario</th>
+          <th scope="col">ID email</th>
+          <th scope="col">ID contraseña</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <% for (var i=0; i<emal.length; i++) { %>
+          <tr class="<%= i % 2 == 0 ? 'table-primary' : '' %>">
+            <td><%= emal[i].id %></td>
+            <td><%= emal[i].user_id %></td>
+            <td><%= emal[i].product_id %></td>
+            <td><%= emal[i].rating %></td>
+          </tr>
+        <% } %>  
+      </tbody>
+    </table>
+    </div>
+</body>

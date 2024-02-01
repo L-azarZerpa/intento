@@ -1,0 +1,209 @@
+
+
+<%- include('template/header.ejs') %> 
+
+<style>
+  .container-table{
+    max-width: 1250px;
+    justify-content: center;
+    margin: 0 auto;
+
+  }
+</style>
+
+<% for (var i=0; i
+
+<productosConImagenes3.length; i++) { %>
+  <div class="row container-table">
+    <div class="col-md-6">
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-ride="carousel"
+      >
+        <div class="carousel-inner">
+            <% for (var j=0; j<productosConImagenes2.length; j++) { %>
+                <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                    <img class="d-block w-100" src="<%= productosConImagenes2[j].url%>" alt="Slide <%= j %>" style="width: 500px; height: 500px;">
+                </div>
+            <% } %>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title"><%= productosConImagenes3[i].name%></h5>
+          <h2>$ <span id="price"><%= productosConImagenes3[i].price%></span></h2>
+          <p class="card-text" >
+            <strong>Descripción:</strong> <span id="description"><%= productosConImagenes3[i].description%></span> <br />
+            <strong>Marca:</strong> <%= productosConImagenes3[i].brand%> <br />
+            <strong>Grados de alcohol:</strong> <%= productosConImagenes3[i].size%>
+          </p>
+          <button
+            id="c"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#purchaseModal"
+          >
+            Añadir al carrito
+          </button>
+          
+          <input type="hidden" id="idProducto" value="<%= productosConImagenes3[i].code%>">
+          <br>
+          <a href="/rating2/<%= productosConImagenes3[i].code %>"  id="c"
+          class="btn btn-primary"
+          >puntuar producto</a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <pre><%= JSON.stringify(productosConImagenes3[i], null, 2) %></pre> -->
+  <% } %>
+
+  
+
+  <div
+    class="modal fade"
+    id="purchaseModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="purchaseModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="purchaseModalLabel">Compra</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Aquí puedes poner tu formulario de compra -->
+          <form id="formDePago">
+            <div class="form-group">
+              <label for="cardType">Tipo de Tarjeta</label>
+              <select class="form-control" id="cardType">
+                <option value="4111111111111111">Visa</option>
+                <option value="5555555555554444">Mastercard</option>
+                <option value="378282246310005">American Express</option>
+                <option value="6011111111111117">Discover</option>
+                <option value="3530111333300000">JCB</option>
+                <option value="30569309025904">Diners Club</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="cvv">CVV</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cvv"
+                placeholder="123"
+              />
+            </div>
+            <div class="form-group">
+              <label for="expirationMonth">Mes de Expiración</label>
+              <input
+                type="text"
+                class="form-control"
+                id="expirationMonth"
+                placeholder="01"
+              />
+            </div>
+            <div class="form-group">
+              <label for="expirationYear">Año de Expiración</label>
+              <input
+                type="text"
+                class="form-control"
+                id="expirationYear"
+                placeholder="2024"
+              />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  Cerrar
+                </button>
+                <button type="submit" class="btn btn-primary">Comprar</button>
+              </div>
+          </form>
+
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document
+      .getElementById("formDePago")
+      .addEventListener("submit", (event) => {
+          
+        event.preventDefault();
+        const pay = {
+          description: document.getElementById("description").textContent,
+          cardType: document.getElementById("cardType").value,
+          cvv: document.getElementById("cvv").value,
+          expirationMonth: document.getElementById("expirationMonth").value,
+          expirationYear: document.getElementById("expirationYear").value,
+          token: localStorage.getItem("token"),
+          idProducto: document.getElementById("idProducto").value,
+          precio: document.getElementById("price").textContent,
+        };
+
+        console.log(pay);
+        if(pay.token === null){
+          window.location.href = "/users/login";
+        }
+
+        fetch("/pay", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pay),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error === "token") {
+              window.location.href = "/users/login";
+            } else {
+              console.log("Success:", data);
+              window.location.href = "/";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
+  </script>
+

@@ -1,0 +1,73 @@
+<%- include('template/cabezera.ejs')  %>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Lista de productos</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/imagenes">Lista de imágenes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categoria">Lista de categoría</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/admin/agregar">Agregar producto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/compras">Compras</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <style>
+    .table-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  </style>
+  
+  <div class="table-container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">codigo</th>
+        <th scope="col">precio</th>
+        <th scope="col">descripcion</th>
+        <th scope="col">marca</th>
+        <th scope="col">grados alcohol</th>
+        <th scope="col">categoria_id</th>
+        <th scope="col">editar</th>
+        <th scope="col">borrar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i=0; i<productos.length; i++) { %>
+        <tr>
+          <td><%= productos[i].id %></td>
+          <td><%= productos[i].name %></td>
+          <td><%= productos[i].code %></td>
+          <td><%= productos[i].price %></td>
+          <td><%= productos[i].description.substring(0, 120) %></td> 
+          <td><%= productos[i].brand %></td>
+          <td><%= productos[i].size %></td>
+          <td><%= productos[i].categoria_id %></td>
+          <td>
+            <a href="admin/admin/<%= productos[i].id %>/actualizar" class="btn btn-primary">Editar</a>
+          </td>
+          <td>
+            <a href="admin/admin/<%= productos[i].id %>/delete" class="btn btn-danger">borrar</a>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+  </div>
+</body>

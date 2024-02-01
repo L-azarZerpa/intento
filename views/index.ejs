@@ -1,0 +1,100 @@
+<%- include('template/cabezera.ejs')  %>
+  <body>
+    <%- include('template/header.ejs')  %>
+  <br>  
+  <style>
+    .rating {
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .star {
+      font-size: 32px;
+      color: #bbb;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+  
+    .checked {
+      font-size: 32px;
+      color: gold;
+    }
+  
+    .plana {
+      display: none;
+    }
+  </style>
+<input id="caja" class="modo" type="button" value="cambiar modo">
+<br>
+  <div class="pc" id="pc">
+    <% for (var i=0; i<productosConImagenes.length; i++) { %>
+    <div class="articulo">
+      <h3><%= productosConImagenes[i].name %></h3>
+      <a href="/producto/<%= productosConImagenes[i].id %>">
+        <img src="<%= productosConImagenes[i].url %>" alt="<%= productosConImagenes[i].name %>"></td>
+      </a> 
+        <div class="rating">
+          <% for (var j=0; j<Math.floor(productosConImagenes[i].rating) ; j++) { %>
+            <div class="checked">&#9733;</div>
+          <% } %>
+          <% if (productosConImagenes[i].rating % 1 >= 0.1) { %>
+            <div class="star-half" style="
+              color: yellow;
+              display: inline-block;
+              font-size: 32px;
+              clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+            ">&#9733;</div>
+          <% } %>
+          <% for (var j=Math.ceil(productosConImagenes[i].rating); j<5; j++) { %>
+            <div class="star">&#9733;</div>
+          <% } %>
+        </div>
+      <h1><%= productosConImagenes[i].price %> $</h1>
+      <h6><%= productosConImagenes[i].code %></h6>
+      <h6><%= productosConImagenes[i].description %></h6>
+      <h6><%= productosConImagenes[i].brand %></h6>
+      <h6><%= productosConImagenes[i].size %></h6>
+      <h6><%= productosConImagenes[i].nameCategoria %></h6>
+      <button class="button-add" onclick="add('product-2', 300)">Agregar</button>
+    </div>
+  <% } %>
+</div>
+<div>
+  <table class="filtro" id="e">
+    <thead>
+      <tr>   
+        <th class="o">Nombre</th>
+        <th class="o">imagenes</th>
+        <th class="o">precio</th>
+        <th class="o">o</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i=0; i<productosConImagenes.length; i++) { %>
+     <tr class="iw">
+          <td class="i"><%= productosConImagenes[i].name %></td>
+          <td class="i">
+          <a href="/producto/<%= productosConImagenes[i].id %>">
+            <img class="imageness" src="<%= productosConImagenes[i].url %>" alt="<%= productosConImagenes[i].name %>"></td>
+          </a>
+          <td class="i"><%= productosConImagenes[i].price %> $</td>
+          <td class="i">
+            <a href="/producto/product-2" class="button-add" onclick="add('product-2', 300)">
+              Agregar
+            </a>
+          </td>
+          <td class="inv"><%= productosConImagenes[i].code %></td>
+          <td class="inv"><%= productosConImagenes[i].description %></td>
+          <td class="inv"><%= productosConImagenes[i].brand %></td>
+          <td class="inv"><%= productosConImagenes[i].size %></td>
+          <td class="inv"><%= productosConImagenes[i].nameCategoria %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>  
+</div>
+<script src="pepe.js"></script>
+<script src="script.js"></script>
+<script src="script2.js"></script>    
+  </body>
+</html>

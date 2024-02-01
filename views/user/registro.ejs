@@ -1,0 +1,85 @@
+<%- include('../template/header.ejs') %>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <form id="registerForm">
+          <h4 class="mb-4">Register to continue</h4>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+ -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LclRFApAAAAAHolO8bynkZ4ZkAo93WcNor9FqBQ"></script>
+
+  <script>
+    document
+      .getElementById("submitBtn")
+      .addEventListener("click", function (event) {
+        event.preventDefault();
+        grecaptcha.ready(function () {
+          grecaptcha
+            .execute("6LclRFApAAAAAHolO8bynkZ4ZkAo93WcNor9FqBQ", {
+              action: "submit",
+            })
+            .then(function (token) {
+              const username = document.getElementById("username").value;
+              const email = document.getElementById("email").value;
+              const password = document.getElementById("password").value;
+
+              const data = {
+                username,
+                email,
+                password,
+                recaptchaResponse: token,
+              };
+
+               console.log(data);
+
+              fetch("/users/registro", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/";
+                  }
+                })
+                .catch((error) => console.error("Error:", error));
+            });
+        });
+      });
+  </script>
+</body>

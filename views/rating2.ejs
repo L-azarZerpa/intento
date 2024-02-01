@@ -1,0 +1,167 @@
+
+<%- include('template/header.ejs') %> 
+<body>
+    <style>
+    
+    .rating{
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .star{
+        font-size: 32px;
+        color: #bbb;
+        transition: color 0.3s;
+        cursor: pointer;
+    }
+    
+    .star:hover,
+    .star.checked{
+        color: gold;
+    }
+    .plana{
+        display:none;
+    }
+    </style>
+
+    
+
+
+
+<style>
+    .container-table{
+      max-width: 1250px;
+      justify-content: center;
+      margin: 0 auto;
+  
+    }
+  </style>
+  
+  <% for (var i=0; i
+  
+  <productosConImagenes3.length; i++) { %>
+
+
+
+    
+
+
+
+
+    <div class="row container-table">
+      <div class="col-md-6">
+        <div
+          id="carouselExampleIndicators"
+          class="carousel slide"
+          data-ride="carousel"
+        >
+          <div class="carousel-inner">
+              <% for (var j=0; j<productosConImagenes2.length; j++) { %>
+                  <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                      <img class="d-block w-100" src="<%= productosConImagenes2[j].url%>" alt="Slide <%= j %>" style="width: 500px; height: 500px;">
+                  </div>
+              <% } %>
+          </div>
+          <a
+            class="carousel-control-prev"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a
+            class="carousel-control-next"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+          
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title"><%= productosConImagenes3[i].name%></h5>
+            <h2>$ <span id="price"><%= productosConImagenes3[i].price%></span></h2>
+            <p class="card-text" >
+              <strong>Descripción:</strong> <span id="description"><%= productosConImagenes3[i].description%></span> <br />
+              <strong>Marca:</strong> <%= productosConImagenes3[i].brand%> <br />
+              <strong>Grados de alcohol:</strong> <%= productosConImagenes3[i].size%>
+            </p>
+            <form id="star-form" action="/rat" method="post">
+                <div class="rating">
+                  <i class="bi bi-star-fill star"></i>
+                  <i class="bi bi-star-fill star"></i>
+                  <i class="bi bi-star-fill star"></i>
+                  <i class="bi bi-star-fill star"></i>
+                  <i class="bi bi-star-fill star"></i>
+                </div>
+        
+                <input type="hidden" id="selected-stars" name="selectedStars" value="0">
+              </form>
+            
+            <input type="hidden" id="idProducto" value="<%= productosConImagenes3[i].code%>">
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- <pre><%= JSON.stringify(productosConImagenes3[i], null, 2) %></pre> -->
+    <% } %>
+    <script>
+    const stars = document.querySelectorAll('.star');
+     const form = document.querySelector('#star-form');
+     const selectedStarsInput = document.querySelector('#selected-stars');
+     
+     stars.forEach(function(star, index){
+  star.addEventListener('click', function() {
+    for (let i=0; i<=index; i++){
+        stars[i].classList.add('checked')
+    }
+    for (let i=index+1; i< stars.length; i++){
+        stars[i].classList.remove('checked')
+    }
+    
+    selectedStarsInput.value = index + 1;
+    let p = selectedStarsInput.value
+    event.preventDefault();
+    let pay={value:p,
+       token: localStorage.getItem("token"),
+       idProducto: document.getElementById("idProducto").value,
+   }
+    console.log(pay.token);
+    if(pay.token === null){
+      window.location.href = "/users/login";
+    }
+    
+    fetch("/rat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pay),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  })
+});
+         </script>
+</body>
+</html>
