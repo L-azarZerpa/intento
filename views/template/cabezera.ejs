@@ -29,14 +29,14 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "<%= productosConImagenes[i].nameCategoria %>",
         "name": "<%= productosConImagenes[i].name %>",
-        "image": "Product Image URL",
-        "description": "Product Description",
-        "brand": "Product Brand",
+        "image": "<%= productosConImagenes[i].url %>",
+        "description": "<%= productosConImagenes[i].description %>",
+        "brand": "<%= productosConImagenes[i].brand %>",
         "offers": {
           "@type": "Offer",
-          "price": "Product Price",
+          "price": "<%= productosConImagenes[i].price %>",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock"
         }
