@@ -2,7 +2,9 @@
   <body>
     <%- include('template/header.ejs')  %>
   <br>  
+  
   <style>
+   
     .rating {
       display: flex;
       justify-content: space-between;
@@ -23,7 +25,20 @@
     .plana {
       display: none;
     }
+    
   </style>
+
+
+
+
+
+
+
+
+
+
+
+<!--  -->
 <input id="caja" class="modo" type="button" value="cambiar modo">
 <br>
   <div class="pc" id="pc">
@@ -32,11 +47,13 @@
       <h3><%= productosConImagenes[i].name %></h3>
       <a href="/producto/<%= productosConImagenes[i].id %>">
         <img src="<%= productosConImagenes[i].url %>" alt="<%= productosConImagenes[i].name %>"></td>
-      </a> 
+      </a>
+      <div class="rating">
         <div class="rating">
           <% for (var j=0; j<Math.floor(productosConImagenes[i].rating) ; j++) { %>
             <div class="checked">&#9733;</div>
           <% } %>
+
           <% if (productosConImagenes[i].rating % 1 >= 0.1) { %>
             <div class="star-half" style="
               color: yellow;
@@ -49,6 +66,8 @@
             <div class="star">&#9733;</div>
           <% } %>
         </div>
+
+    </div>
       <h1><%= productosConImagenes[i].price %> $</h1>
       <h6><%= productosConImagenes[i].code %></h6>
       <h6><%= productosConImagenes[i].description %></h6>
