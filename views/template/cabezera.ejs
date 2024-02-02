@@ -21,19 +21,30 @@
 
 
 
- <!-- Marcado JSON-LD generado por el Asistente para el marcado de datos estructurados de Google. -->
+  <% for (var i=0; i<productosConImagenes.length; i++) { %>
 <script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Product",
-    "name": "Polar Light",
-    "image": "https://th.bing.com/th/id/OIP.SuQu8ax98ORc1YTBIWFiGwHaHa?w=208&h=208&c=7&r=0&o=5&pid=1.7",
-    "offers": {
-      "@type": "Offer",
-      "price": "5"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "<%= productosConImagenes[i].nameCategoria %>",
+  "name": "<%= productosConImagenes[i].name %>",
+  "image": "<%= productosConImagenes[i].url %>",
+  "description": "<%= productosConImagenes[i].description %>",
+  "brand": "<%= productosConImagenes[i].brand %>",
+  "offers": {
+    "@type": "Offer",
+    "price": "<%= productosConImagenes[i].price %>",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "productosConImagenes[i].rating",
+    "reviewCount": "Number of Reviews"
   }
-  </script>
+}
+</script>
+<% } %>
+
 
 
 
