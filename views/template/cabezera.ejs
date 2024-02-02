@@ -21,29 +21,25 @@
 
 
 
-  <% for (var i=0; i<productosConImagenes.length; i++) { %>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "<%= productosConImagenes[i].nameCategoria %>",
-  "name": "<%= productosConImagenes[i].name %>",
-  "image": "<%= productosConImagenes[i].url %>",
-  "description": "<%= productosConImagenes[i].description %>",
-  "brand": "<%= productosConImagenes[i].brand %>",
-  "offers": {
-    "@type": "Offer",
-    "price": "<%= productosConImagenes[i].price %>",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock",
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "productosConImagenes[i].rating",
-    "reviewCount": "Number of Reviews"
-  }
-}
-</script>
-<% } %>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Product Name",
+      "image": "Product Image URL",
+      "description": "Product Description",
+      "brand": "Product Brand",
+      "offers": {
+        "@type": "Offer",
+        "price": "Product Price",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  
+  
+  
+  </script>
 
 
 
