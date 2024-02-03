@@ -3,7 +3,8 @@ const db = require('./configDB.js');
 const {
   selectImagesAndProducts,
   selectImagesAndProducts2,
-  selectImagesAndProducts3 } = require("./consultas/selectImagesAndProduct")
+  selectImagesAndProducts3,
+  selectImagesAndProductsRating } = require("./consultas/selectImagesAndProduct")
 
 const {
   insert,
@@ -56,6 +57,7 @@ module.exports = {
   selectImagesAndProducts,
   selectImagesAndProducts2,
   selectImagesAndProducts3,
+  selectImagesAndProductsRating,
 
   updateImg,
   updateCategoria,

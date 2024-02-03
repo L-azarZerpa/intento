@@ -8,7 +8,7 @@
     .rating {
       display: flex;
       justify-content: space-between;
-      
+      font-size: 30px;
     }
   
     .star {
@@ -45,10 +45,8 @@
 
 <!--  -->
 <input id="caja" class="modo" type="button" value="cambiar modo">
-<button id="todas" >mostrar todos los productos</button>
 <form id="star-form" action="/rat" method="post">
   <div class="rating" id="5">
-    <p>filtrar por estrellas:</p>
     <i class="bi bi-star-fill star"></i>
     <i class="bi bi-star-fill star"></i>
     <i class="bi bi-star-fill star"></i>
@@ -68,11 +66,18 @@
       </a>
       <div class="rating">
         <div class="rating">
-          <% for (var j=0; j<productosConImagenes[i].rating ; j++) { %>
+          <% for (var j=0; j<Math.floor(productosConImagenes[i].rating) ; j++) { %>
             <div class="checked">&#9733;</div>
           <% } %>
 
-          
+          <% if (productosConImagenes[i].rating % 1 >= 0.1) { %>
+            <div class="star-half" style="
+              color: yellow;
+              display: inline-block;
+              font-size: 32px;
+              clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+            ">&#9733;</div>
+          <% } %>
           <% for (var j=Math.ceil(productosConImagenes[i].rating); j<5; j++) { %>
             <div class="star">&#9733;</div>
           <% } %>

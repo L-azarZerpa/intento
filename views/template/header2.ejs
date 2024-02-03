@@ -21,6 +21,39 @@
 
 
 
+ 
+
+  <% for (var i=0; i<productosConImagenes.length; i++) { %>
+
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "<%= productosConImagenes[i].name %>",
+        "image": "<%= productosConImagenes[i].url %>",
+        "description": "<%= productosConImagenes[i].description %>",
+        "brand": "<%= productosConImagenes[i].brand %>",
+        "offers": {
+          "@type": "Offer",
+          "price": "<%= productosConImagenes[i].price %>",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "<%= productosConImagenes[i].rating %>",
+          "reviewCount": "10"
+        }
+      }
+    
+    </script>
+    
+        
+    
+    
+      <% } %> 
+
 
 
 

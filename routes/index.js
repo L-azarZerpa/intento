@@ -1,13 +1,22 @@
 var express = require('express');
 const db = require('../configuration/database');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 var router = express.Router();
-const { getUserByEmail } = require('../configuration/consultasTask3/usuario.js');
+const { getUserByEmail, updatePassword, getUserById } = require('../configuration/consultasTask3/usuario.js');
 const nodemailer = require('nodemailer');
 const { htmlRecuperacion } = require('../views/htmlRecuperation/html.js');
 
 
 require('dotenv').config()
+
+/*
+db.selectImagesAndProductsRating(function (row) {
+
+  console.log(row);
+  
+})
+*/
 
 
 router.get('/', function (req, res, next) {
@@ -243,7 +252,7 @@ router.get('/rating2/:id', (req, res, next) => {
     router.get('/pro', (req, res, next) => {
       res.render('pro', { title: 'Registros del formulario'});
     });
-
+   
     
     router.post('/pro', function (req, res, next) {
       
@@ -279,14 +288,14 @@ router.get('/rating2/:id', (req, res, next) => {
                         pass : process.env.PASS
                     }
                 }
-                console.log("token: ", token);
+                
             const mensaje = {
               from : process.env.USER,
               to : user.email,
-              subject : 'recuperacion de contraseña',
-              html : htmlRecuperacion(user.username,token,"u") 
+              subject : 'recuperacion de contraseñas',
+              html : htmlRecuperacion(user.username,token,process.env.LINK) 
             }
-            console.log(mensaje);
+            
             const transport = nodemailer.createTransport(config);
             const info = await transport.sendMail(mensaje);
             
@@ -294,7 +303,7 @@ router.get('/rating2/:id', (req, res, next) => {
             } 
             
           emailSubmit();
-            
+          res.redirect('/')
             
           } else {
               console.log('No se encontró un usuario con ese correo electrónico')
@@ -309,13 +318,47 @@ router.get('/rating2/:id', (req, res, next) => {
   });
 
 
+  router.get('/recuperar/:token', (req, res, next) => {
+    res.render('recuperar', { title: 'Registros del formulario'});
+  });
+
+  router.post('/recuperation', function (req, res, next) {
+    let password = req.body.password
+    let token = req.body.token
+    const { JWT_SECRETO } = process.env;
+    const decoded = jwt.verify(token, JWT_SECRETO);
+    getUserById(decoded.id, function (err, user) {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error fetching user', error: err.message });
+      }
+      if (!user) {
+        return res.status(400).json({ message: 'User not found' });
+      }
+      console.log(user);
+      bcrypt.hash(password, 10, function (err, hash) {
+        updatePassword(hash,decoded.id);
+        res.redirect('/')
+      })
+   });
+});
+
+  
+
+  
 
 
 
 
 
-
-
-
+router.get('/prueba', function (req, res, next) {
+  db.selectImagesAndProducts(function (productosConImagenes) {
+    db.selectCategoria(function (categorias) {
+      db.selectImagesAndProductsRating(function (row) {
+        res.render('prueba', { title: 'Registros del formulario', productosConImagenes: productosConImagenes, categorias: categorias,row:row });
+      })
+    });
+  })
+});
 
 module.exports = router;  

@@ -11,10 +11,33 @@ function registerUser(username, email, password) {
   });
 }
 
+function updatePassword(password,id)  {
+  const sql = `UPDATE users SET password = ? WHERE id = ?`;
+
+  db.run(sql, [password,id], function (err) {
+      if (err) {
+          return console.log(err.message);
+      }
+      console.log(`Row(s) updated: ${this.changes}`);
+  });
+}
+
 function getUserByEmail(email, callback) {
   const sql = `SELECT * FROM users WHERE email = ?`;
 
   db.get(sql, [email], function (err, row) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback(null, row);
+  });
+}
+
+function getUserById(id, callback) {
+  const sql = `SELECT * FROM users WHERE id = ?`;
+
+  db.get(sql, [id], function (err, row) {
     if (err) {
       return callback(err);
     }
@@ -36,6 +59,8 @@ const selectEmail = (callback) => {
 
 module.exports = {
   registerUser,
+  updatePassword,
   getUserByEmail,
+  getUserById,
   selectEmail
 };
