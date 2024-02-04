@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const { registerUser, getUserByEmail } = require('../configuration/consultasTask3/usuario.js');
 
 const fetch = require('node-fetch');
+const { use } = require('passport');
 
 
 /* GET users listing. */
@@ -20,7 +21,8 @@ router.get('/registro', function (req, res, next) {
 router.post('/registro', async function (req, res) {
 
   const { username, email, password, recaptchaResponse } = req.body;
-
+  console.log(username);
+  console.log(typeof(username));
   const recaptchaSecretKey = '6LclRFApAAAAAOPcCBRKFqgklXv0gYF6yGPXO5LB';
   const recaptchaUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaResponse}`;
 
@@ -42,7 +44,8 @@ router.post('/registro', async function (req, res) {
       registerUser(username, email, hash);
 
       const token = jwt.sign({ username, email }, process.env.JWT_SECRETO, { expiresIn: '1h' });
-      
+      let username2 = username
+          console.log(username2);
     
     
       
@@ -50,34 +53,6 @@ router.post('/registro', async function (req, res) {
       
 
 
-      try {
-
-        emailSubmit = async () => {
-          const config = {
-              host : 'smtp.gmail.com',
-              port : 587,
-              auth : {
-                  user : process.env.USER,
-        
-                  pass : process.env.PASS
-              }
-          }
-      const mensaje = {
-        from : process.env.USER,
-        to : username,
-        subject : 'formulario programacion2',
-        text : ' bienvenido usuario: ' + username 
-      }
-      const transport = nodemailer.createTransport(config);
-      const info = await transport.sendMail(mensaje);
-      
-      console.log(info);
-      } 
-      
-      emailSubmit();
-      } catch (error) {
-      console.error(error);
-      }
       
 
 
@@ -94,6 +69,36 @@ router.post('/registro', async function (req, res) {
       res.status(500).json({ message: 'Error registering user' });
     }
   });
+  
+      try {
+
+        emailSubmit = async () => {
+          const config = {
+              host : 'smtp.gmail.com',
+              port : 587,
+              auth : {
+                  user : process.env.USER,
+        
+                  pass : process.env.PASS
+              }
+          }
+          
+      const mensaje = {
+        from : process.env.USER,
+        to : email,
+        subject : 'formulario programacion2',
+        text : ' bienvenido usuario: ' + email 
+      }
+      const transport = nodemailer.createTransport(config);
+      const info = await transport.sendMail(mensaje);
+      
+      console.log(info);
+      } 
+      
+      emailSubmit();
+      } catch (error) {
+      console.error(error);
+      }
 });
 
 router.get('/login', function (req, res, next) {
